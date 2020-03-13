@@ -4,11 +4,11 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
 def main():
-    cleveland = pd.read_csv('cleveland_processed.csv')
+    cleveland = pd.read_csv('copy_filtered - cleveland_processed.csv')
     cleveland = cleveland.dropna()
-    X = cleveland.loc[:, cleveland.columns != 'num..predicted.']
+    X = cleveland.loc[:, cleveland.columns != 'prediction']
     X = pd.get_dummies(X)
-    y = cleveland['num..predicted.']
+    y = cleveland['prediction']
     
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
@@ -24,5 +24,6 @@ def main():
     for (x, y) in (zip(y_train_pred, y_train)):
         print('(' + str(x) + ', ' + str(y) + ')')
 
+    print(accuracy_score(y_train, y_train_pred))
 if __name__ == '__main__':
     main()
