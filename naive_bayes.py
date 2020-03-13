@@ -2,9 +2,11 @@ import pandas as pd
 from sklearn.naive_bayes import GaussianNB
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix
+from sklearn.naive_bayes import MultinomialNB
 
 def main():
-    cleveland = pd.read_csv('copy_filtered - cleveland_processed.csv')
+    cleveland = pd.read_csv('cleveland_processed.csv')
     cleveland = cleveland.dropna()
     X = cleveland.loc[:, cleveland.columns != 'prediction']
     X = pd.get_dummies(X)
@@ -12,7 +14,7 @@ def main():
     
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
-    model = GaussianNB()
+    model = MultinomialNB()
     model.fit(X_train, y_train)
 
     y_train_pred = model.predict(X_train)
@@ -25,5 +27,9 @@ def main():
         print('(' + str(x) + ', ' + str(y) + ')')
 
     print(accuracy_score(y_train, y_train_pred))
+
+    confusion_mtx = confusion_matrix(y_test, y_test_pred)
+    print(confusion_mtx)
+
 if __name__ == '__main__':
     main()
