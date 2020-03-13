@@ -4,9 +4,11 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 
 def decision_tree(data):
-    X = data.loc[:, data.columns != 'num..predicted.']
+    data = data.dropna().reset_index(drop=True)
+    data.loc[data['prediction'] > 0, 'prediction'] = 1
+    X = data.loc[:, data.columns != 'prediction']
     X = pd.get_dummies(X)
-    y = data['num..predicted.']
+    y = data['prediction']
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
     model = DecisionTreeClassifier()
     model.fit(X_train, y_train)
