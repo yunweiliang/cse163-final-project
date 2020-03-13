@@ -15,12 +15,20 @@ class ML_Model:
         # Make into binary problem
         self._data.loc[self._data['prediction'] > 0, 'prediction'] = 1
         self._feature_importances = None
+        self.setX()
+
+    def setX(self, x = None):
+        if x is None:
+            self._X = self._data.loc[:, self._data.columns != 'prediction']
+            self._X = pd.get_dummies(self._X)
+        else:
+            self._X = x
 
     def decision_tree(self):
-        X = self._data.loc[:, self._data.columns != 'prediction']
-        X = pd.get_dummies(X)
+        #X = self._data.loc[:, self._data.columns != 'prediction']
+        #X = pd.get_dummies(X)
         y = self._data['prediction']
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+        X_train, X_test, y_train, y_test = train_test_split(self._X, y, test_size=0.2)
         model = DecisionTreeClassifier()
         model.fit(X_train, y_train)
         result = accuracy_score(y_test, model.predict(X_test))
@@ -31,12 +39,12 @@ class ML_Model:
         X = pd.get_dummies(X)
         y = self._data['prediction']
 
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+        X_train, X_test, y_train, y_test = train_test_split(self._X, y, test_size=0.2)
 
         model = GaussianNB()
         model.fit(X_train, y_train)
 
-        y_train_pred = model.predict(X_train)
+        #y_train_pred = model.predict(X_train)
         y_test_pred = model.predict(X_test)
 
         #score_train = accuracy_score(y_train, y_train_pred)
@@ -44,12 +52,16 @@ class ML_Model:
         return score_test
 
     def forest(self):
-        np_label  =  np.array(self._data['prediction'])
+        #np_label  =  np.array(self._data['prediction'])
         data =  self._data.drop('prediction', axis=1)
         col_name = list(data.columns)
-        np_data = np.array(data)
+        #np_data = np.array(data)
         # split data
-        X_train, X_test, y_train, y_test = train_test_split(np_data, np_label, test_size=0.2)
+        X = self._data.loc[:, self._data.columns != 'prediction']
+        X = pd.get_dummies(X)
+        y = self._data['prediction']
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+        #X_train, X_test, y_train, y_test = train_test_split(np_data, np_label, test_size=0.2)
         # Train model
         rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
         rf_model.fit(X_train, y_train)
