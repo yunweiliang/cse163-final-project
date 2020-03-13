@@ -15,9 +15,6 @@ class ML_Model:
         # Make into binary problem
         self._data.loc[self._data['prediction'] > 0, 'prediction'] = 1
         self._feature_importances = None
-        
-        self.setX()
-        self.sety()
 
     def setX(self, x = None):
         if x is None:
@@ -32,18 +29,18 @@ class ML_Model:
         else:
             self._y = y
     
-    def decision_tree(self):
-        self.setX(x=None)
-        self.sety(y=None)
+    def decision_tree(self, x=None, y=None):
+        self.setX(x=x)
+        self.sety(y=y)
         X_train, X_test, y_train, y_test = train_test_split(self._X, self._y, test_size=0.2)
         model = DecisionTreeClassifier()
         model.fit(X_train, y_train)
         result = accuracy_score(y_test, model.predict(X_test))
         return result
 
-    def naive_bayes(self):
-        self.setX(x=None)
-        self.sety(y=None)
+    def naive_bayes(self, x=None, y=None):
+        self.setX(x=x)
+        self.sety(y=y)
         X_train, X_test, y_train, y_test = train_test_split(self._X, self._y, test_size=0.2)
         model = GaussianNB()
         model.fit(X_train, y_train)
@@ -51,7 +48,7 @@ class ML_Model:
         score_test = accuracy_score(y_test, y_test_pred)
         return score_test
 
-    def forest(self):
+    def forest(self, x=None, y=None):
         data =  self._data.drop('prediction', axis=1)
         col_name = list(data.columns)
  
@@ -70,7 +67,7 @@ class ML_Model:
 
         return rf_model.score(X_test, y_test)
 
-    def calculate_mean_accuracy(self, n=50):
+    def calculate_mean_accuracy(self, n=10):
         decision_tree = 0
         naive_bayes = 0
         forest = 0
@@ -78,9 +75,7 @@ class ML_Model:
             decision_tree += self.decision_tree()
             naive_bayes += self.naive_bayes()
             forest += self.forest()
-        print('Decision Tree Mean:        ', str(decision_tree/n))
-        print('Naive Bayes Mean:        ', str(naive_bayes/n))
-        print('Random Forest Mean:        ', str(forest/n))
+        return ((decision_tree/n), (naive_bayes/n), (forest/n))
 
 
 def main():
@@ -89,10 +84,13 @@ def main():
     print('Decision Tree Score:', model.decision_tree())
     print('Gaussian Naive Bayes Score:', model.naive_bayes())
     print('Random Forest Score:', model.forest())
-
     print()
 
-    model.calculate_mean_accuracy()
+    mean_accuracy = model.calculate_mean_accuracy()
 
+    print('Decision Tree Mean:        ', str(mean_accuracy[0]))
+    print('Naive Bayes Mean:        ', str(mean_accuracy[1]))
+    print('Random Forest Mean:        ', str(mean_accuracy[2]))
+ 
 if __name__ == '__main__':
     main()
