@@ -15,9 +15,9 @@ class ML_Model:
         # Make into binary problem
         self._data.loc[self._data['prediction'] > 0, 'prediction'] = 1
         self._feature_importances = None
-        self._y = self._data['prediction']
+        
         self.setX()
-
+        self.sety()
 
     def setX(self, x = None):
         if x is None:
@@ -26,6 +26,12 @@ class ML_Model:
         else:
             self._X = x
 
+    def sety(self, y=None):
+        if y is None:
+            self._y = self._data['prediction']
+        else:
+            self._y = y
+    
     def decision_tree(self):
         X_train, X_test, y_train, y_test = train_test_split(self._X, self._y, test_size=0.2)
         model = DecisionTreeClassifier()
@@ -43,8 +49,10 @@ class ML_Model:
         return score_test
 
     def forest(self):
-        data =  self._data.drop('prediction', axis=1)
-        col_name = list(data.columns)
+        col_name = list(self._X.columns)
+ 
+        self.setX(x=np.array(self._X))
+        self.sety(y=np.array(self._y))
 
         X_train, X_test, y_train, y_test = train_test_split(self._X, self._y, test_size=0.2)
         rf_model = RandomForestClassifier(n_estimators=1000, random_state=42)
