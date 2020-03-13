@@ -4,8 +4,11 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 
 def decision_tree(data):
+<<<<<<< HEAD
     data = data.dropna().reset_index(drop=True)
     data.loc[data['prediction'] > 0, 'prediction'] = 1
+=======
+>>>>>>> 75fa494dac44ed5010ca06cba732652c6db665c1
     X = data.loc[:, data.columns != 'prediction']
     X = pd.get_dummies(X)
     y = data['prediction']
