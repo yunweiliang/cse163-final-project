@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import graphviz
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
@@ -7,6 +8,10 @@ from sklearn.naive_bayes import GaussianNB
 
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
+from sklearn import tree
+from sklearn.tree import export_graphviz
+from subprocess import call
+from IPython.display import Image
 
 class ML_Model:
     def __init__(self, file_path):
@@ -34,7 +39,14 @@ class ML_Model:
         self.sety(y=y)
         X_train, X_test, y_train, y_test = train_test_split(self._X, self._y, test_size=0.2)
         model = DecisionTreeClassifier()
-        model.fit(X_train, y_train)
+        model = model.fit(X_train, y_train)
+        dot_data = export_graphviz(model, out_file=None, 
+                      feature_names=X_train.columns,  
+                      class_names=str(y_train.unique()),  
+                      filled=True, rounded=True,  
+                      special_characters=True) 
+        graph = graphviz.Source(dot_data)
+        graph.render('decision_tree') 
         result = accuracy_score(y_test, model.predict(X_test))
         return result
 
@@ -58,7 +70,15 @@ class ML_Model:
         X_train, X_test, y_train, y_test = train_test_split(self._X, self._y, test_size=0.2)
         rf_model = RandomForestClassifier(n_estimators=1000, random_state=42)
         rf_model.fit(X_train, y_train)
+        estimator = rf_model.estimators_[5]
 
+        export_graphviz(estimator, out_file='tree.dot', 
+                feature_names = col_name,
+                class_names = str(self._y),
+                rounded = True, proportion = False, 
+                precision = 2, filled = True) 
+        call(['dot', '-Tpng', 'tree.dot', '-o', 'tree.png', '-Gdpi=600'])
+        Image(filename = 'tree.png')
         # save feature importances for Part 2: feature selection
         importances = list(rf_model.feature_importances_)
         feature_importances = [(feature, round(importance, 2)) for feature, importance in zip(col_name, importances)]
