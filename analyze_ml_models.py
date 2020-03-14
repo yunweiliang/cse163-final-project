@@ -18,11 +18,16 @@ from IPython.display import Image
 
 class ML_Model:
     def __init__(self, file_path):
-        self._data = pd.read_csv(file_path)
+        self._data = file_path
         self._data = self._data.dropna().reset_index(drop=True)
         # Make into binary problem
         self._data.loc[self._data['prediction'] > 0, 'prediction'] = 1
         self._feature_importances = None
+
+
+    def get_clean_data(self):
+        return self._data
+
 
     def setX(self, x = None):
         if x is None:
@@ -116,21 +121,3 @@ class ML_Model:
         plt.xlabel('Models')
         plt.ylabel('Score')
         plt.savefig('box_plot.png')
-
-def main():
-    model = ML_Model('cleveland_processed.csv')
-
-    print('Decision Tree Score:', model.decision_tree())
-    print('Gaussian Naive Bayes Score:', model.naive_bayes())
-    print('Random Forest Score:', model.forest())
-    print()
-    mean_accuracy = model.calculate_mean_accuracy()
-    print('Decision Tree Mean Score:', mean_accuracy['decision_tree'])
-    print('Gaussian Naive Bayes Mean Score:', mean_accuracy['naive_bayes'])
-    print('Random Forest Mean Score:', mean_accuracy['forest'])
-
-
-    model.trials_box_plot()
- 
-if __name__ == '__main__':
-    main()
