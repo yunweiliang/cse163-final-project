@@ -1,6 +1,9 @@
 import pandas as pd
 import numpy as np
 import graphviz
+import seaborn as sns
+import matplotlib.pyplot as plt
+
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
@@ -87,16 +90,32 @@ class ML_Model:
 
         return rf_model.score(X_test, y_test)
 
-    def calculate_mean_accuracy(self, n=10):
-        decision_tree = 0
-        naive_bayes = 0
-        forest = 0
-        for i in range(n):
-            decision_tree += self.decision_tree()
-            naive_bayes += self.naive_bayes()
-            forest += self.forest()
-        return ((decision_tree/n), (naive_bayes/n), (forest/n))
+    def _run_trials(self, n=10):
+        data = {'decision_tree':np.zeros(n),
+                'naive_bayes':np.zeros(n),
+                'forest':np.zeros(n)}
+        for i in range(n):  
+            data['decision_tree'][i] = self.decision_tree()
+            data['naive_bayes'][i] = self.naive_bayes()
+            data['forest'][i] = self.forest()
 
+        return pd.DataFrame(data)
+
+    def calculate_mean_accuracy(self, n=10):
+        trials_df = self._run_trials(n=n)
+        means = {'decision_tree': sum(trials_df.loc[:,'decision_tree']) / n,
+                     'naive_bayes': sum(trials_df.loc[:,'naive_bayes']) / n,
+                     'forest': sum(trials_df.loc[:,'forest'])/n}
+        return means
+
+    def trials_box_plot(self, n=10):
+        sns.set(style='whitegrid')
+        sns.boxplot(data=self._run_trials())
+        plt.title('Model Performance over ' + str(n) + ' Trials')
+        plt.xticks((0, 1, 2), ('Decision Tree', 'Naive Bayes', 'Random Forest'))
+        plt.xlabel('Models')
+        plt.ylabel('Score')
+        plt.savefig('box_plot.png')
 
 def main():
     model = ML_Model('cleveland_processed.csv')
@@ -105,12 +124,13 @@ def main():
     print('Gaussian Naive Bayes Score:', model.naive_bayes())
     print('Random Forest Score:', model.forest())
     print()
-
     mean_accuracy = model.calculate_mean_accuracy()
+    print('Decision Tree Mean Score:', mean_accuracy['decision_tree'])
+    print('Gaussian Naive Bayes Mean Score:', mean_accuracy['naive_bayes'])
+    print('Random Forest Mean Score:', mean_accuracy['forest'])
 
-    print('Decision Tree Mean:        ', str(mean_accuracy[0]))
-    print('Naive Bayes Mean:        ', str(mean_accuracy[1]))
-    print('Random Forest Mean:        ', str(mean_accuracy[2]))
+
+    model.trials_box_plot()
  
 if __name__ == '__main__':
     main()

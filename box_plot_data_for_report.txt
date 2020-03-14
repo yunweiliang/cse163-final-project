@@ -1,0 +1,7 @@
+Decision Tree Score: 0.75
+Gaussian Naive Bayes Score: 0.9
+Random Forest Score: 0.8166666666666667
+
+Decision Tree Mean Score: 0.7383333333333335
+Gaussian Naive Bayes Mean Score: 0.8366666666666667
+Random Forest Mean Score: 0.8300000000000001
