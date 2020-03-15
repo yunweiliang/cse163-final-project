@@ -9,7 +9,8 @@ def correlation(clean_data):
     data =  clean_data.drop('prediction', axis=1)
     col_name = list(data.columns)
     for i in col_name:
-        x = np.array(data[:, i])
+        print(i)
+        x = np.array(data.loc[:, i])
         corr[i] = pearsonr(x,y)
     print(corr)
 
