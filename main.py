@@ -80,15 +80,8 @@ def main():
     #print()
 
     #correlation(clean_data)
-<<<<<<< HEAD
     print(model.cross_validation())
     #plot_feature_importance(model, clean_data.columns[clean_data.columns != 'prediction'])
-=======
-    #print()
-    
-    # Comment out 
-    plot_feature_importance(model, clean_data.columns[clean_data.columns != 'prediction'])
->>>>>>> 12e50f4e49840030664b06bed136e158aec27c71
 
 if __name__ == '__main__':
     main()
