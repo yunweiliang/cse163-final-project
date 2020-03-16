@@ -18,6 +18,7 @@ def plot_feature_importance(model, x_exempt):
     without_dict = model.calculate_mean_accuracy(x_exempt=x_exempt)
     combined = [with_dict, without_dict]
     df = pd.DataFrame(combined)
+    print(df)
     df = df.transpose()
     print(df)
     
