@@ -17,7 +17,8 @@ def correlation(clean_data):
 
 def plot_feature_importance(model, xes_exempt):
     df = pd.DataFrame(columns=['feature', 'contains', 'tree_mean', 'forest_mean', 'bayes_mean'])
-    xes_exempt = ['age', 'sex'] # comment line to run for all features
+    # comment next line to run for all features
+    xes_exempt = ['age', 'sex'] 
     for x_exempt in xes_exempt:
         with_dict = model.calculate_mean_accuracy(n=5, x_exempt=x_exempt)
         without_dict = model.calculate_mean_accuracy(n=5, x_exempt=x_exempt)
@@ -31,16 +32,29 @@ def plot_feature_importance(model, xes_exempt):
                     'bayes_mean':without_dict['naive_bayes']}
         df = df.append(with_row, ignore_index=True)
         df = df.append(without_row, ignore_index=True)
-    df = df.melt(id_vars=['feature', 'contains'],
-                 value_vars=['tree_mean', 'forest_mean', 'bayes_mean'],
-                 var_name='model', value_name='value')
-    print(df)
-    sns.catplot(x='feature', y='value', data=df, kind='bar',
-                hue='contains', col_wrap=1)
-    plt.title('Performances of Models with versus without a Feature')
+    #df = df.melt(id_vars=['feature', 'contains'],
+                 #value_vars=['tree_mean', 'forest_mean', 'bayes_mean'],
+                 #var_name='model', value_name='value')
+    sns.catplot(x='feature', y='tree_mean', data=df,
+                kind='bar', hue='contains').set_xticklabels(rotation=45)
+    plt.title('Performance of Decision Tree with versus without a Feature')
     plt.xlabel('Features')
     plt.ylabel('Accuracy Score')
-    plt.savefig('features_performances_bar_chart.png')
+    plt.savefig('features_performances_tree_model.png')
+    
+    sns.catplot(x='feature', y='forest_mean', data=df,
+                kind='bar', hue='contains').set_xticklabels(rotation=45)
+    plt.title('Performance of Random Forest with versus without a Feature')
+    plt.xlabel('Features')
+    plt.ylabel('Accuracy Score')
+    plt.savefig('features_performances_forest_model.png')
+
+    sns.catplot(x='feature', y='forest_mean', data=df,
+                kind='bar', hue='contains').set_xticklabels(rotation=45)
+    plt.title('Performance of Naive Bayes with versus without a Feature')
+    plt.xlabel('Features')
+    plt.ylabel('Accuracy Score')
+    plt.savefig('features_performances_bayes_model.png')
 
 def main():
     data = pd.read_csv('cleveland_processed.csv')

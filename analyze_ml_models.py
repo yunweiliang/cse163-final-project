@@ -4,7 +4,6 @@ import graphviz
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.naive_bayes import GaussianNB
@@ -25,7 +24,7 @@ class ML_Model:
 
     def get_clean_data(self):
         return self._data
-        
+
     def decision_tree(self, x_exempt=None):
         X = self._data.loc[:, self._data.columns != 'prediction']
         if x_exempt is not None:
