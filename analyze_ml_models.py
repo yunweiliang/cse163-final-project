@@ -25,7 +25,7 @@ class ML_Model:
 
     def get_clean_data(self):
         return self._data
-    
+        
     def decision_tree(self, x_exempt=None):
         X = self._data.loc[:, self._data.columns != 'prediction']
         if x_exempt is not None:
