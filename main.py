@@ -11,7 +11,7 @@ def correlation(clean_data):
     for i in col_name:
         x = np.array(data.loc[:, i])
         corr[i] = pearsonr(x,y)
-    print(corr)
+    print('Correlations:', corr)
 
 def plot_feature_importance(model, x_exempt):
     with_dict = model.calculate_mean_accuracy(x_exempt=x_exempt)
@@ -37,7 +37,7 @@ def main():
     print('Gaussian Naive Bayes Mean Score:', mean_accuracy['naive_bayes'])
     print('Random Forest Mean Score:', mean_accuracy['forest'])
 
-    model.models_performances_box_plot()
+    print(model.models_performances_box_plot())
 
     correlation(clean_data)
 
