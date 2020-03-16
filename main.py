@@ -15,15 +15,17 @@ def correlation(clean_data):
     for i in col_name:
         x = np.array(data.loc[:, i])
         corr[i] = pearsonr(x,y)
-    print('Correlations:', corr)
+    df = pd.DataFrame(corr, index=['Correlation Coefficient', '2 Tailed P-Value'])
+    return df
 
 def plot_feature_importance(model, xes_exempt):
     df = pd.DataFrame(columns=['Feature', 'Contains Feature', 'Decision Tree', 'Random Forest', 'Naive Bayes'])
     n = 5 # default five trials
 
-    # comment next 2 lines to run for all features
-    #xes_exempt = ['age', 'sex'] 
-    #n = 1
+    ######################## comment next 2 lines to run for all features ###########################
+    xes_exempt = ['age', 'sex'] 
+    n = 1
+
     for x_exempt in xes_exempt:
         with_dict = model.calculate_mean_accuracy(n=n, x_exempt=x_exempt)
         without_dict = model.calculate_mean_accuracy(n=n, x_exempt=x_exempt)
@@ -46,7 +48,6 @@ def plot_feature_importance(model, xes_exempt):
     plt.subplots_adjust(top=0.9)
     graph.fig.suptitle('Performance of Models with vs. without a Feature')
     plt.savefig('features_performances_in_models.png')
-    
     return df
 
     
@@ -57,10 +58,10 @@ def main():
     clean_data = model.get_clean_data()
     clean_data.to_csv('clean_data.csv', index=False)
     
-    print('Decision Tree Score:', model.decision_tree())
-    print('Gaussian Naive Bayes Score:', model.naive_bayes())
-    print('Random Forest Score:', model.forest())
-    print()
+    #print('Decision Tree Score:', model.decision_tree())
+    #print('Gaussian Naive Bayes Score:', model.naive_bayes())
+    #print('Random Forest Score:', model.forest())
+    #print()
 
     # Following function calls runs multiple trials
     # Comment out if avoiding time-consuming operations
@@ -72,15 +73,17 @@ def main():
     #print(model.models_performances_box_plot())
     #print()
 
-    #correlation(clean_data)
-    print()
+    feature_correlations = correlation(clean_data)
+    print(feature_correlations)
+    feature_correlations.to_csv('feature_correlations_to_prediction.csv')
     #print(model.cross_validation())
     #print()
     
     # Comment out the suggested 2 lines in plot_feature_importance to plot
     # all features
-    feature_importances = plot_feature_importance(model, clean_data.columns[clean_data.columns != 'prediction'])
-    feature_importances.to_csv('features_performances_in_models.csv')
+    #feature_importances = plot_feature_importance(model, clean_data.columns[clean_data.columns != 'prediction'])
+    #print(feature_importances)
+    #feature_importances.to_csv('features_performances_in_models.csv')
 
 
 if __name__ == '__main__':
