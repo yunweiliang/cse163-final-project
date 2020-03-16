@@ -16,45 +16,34 @@ def correlation(clean_data):
     print('Correlations:', corr)
 
 def plot_feature_importance(model, xes_exempt):
-    df = pd.DataFrame(columns=['feature', 'contains', 'tree_mean', 'forest_mean', 'bayes_mean'])
-    # comment next line to run for all features
-    xes_exempt = ['age', 'sex'] 
+    df = pd.DataFrame(columns=['Feature', 'Contains Feature', 'Decision Tree', 'Random Forest', 'Naive Bayes'])
+    n = 5 # default five trials
+    # comment next 2 lines to run for all features
+    xes_exempt = ['age'] 
+    n = 1
     for x_exempt in xes_exempt:
-        with_dict = model.calculate_mean_accuracy(n=5, x_exempt=x_exempt)
-        without_dict = model.calculate_mean_accuracy(n=5, x_exempt=x_exempt)
-        with_row = {'feature':x_exempt, 'contains':True, 
-                    'tree_mean':with_dict['decision_tree'],
-                    'forest_mean':with_dict['forest'],
-                    'bayes_mean':with_dict['naive_bayes']}
-        without_row = {'feature':x_exempt, 'contains':False, 
-                    'tree_mean':without_dict['decision_tree'],
-                    'forest_mean':without_dict['forest'],
-                    'bayes_mean':without_dict['naive_bayes']}
+        with_dict = model.calculate_mean_accuracy(n=n, x_exempt=x_exempt)
+        without_dict = model.calculate_mean_accuracy(n=n, x_exempt=x_exempt)
+        with_row = {'Feature':x_exempt, 'Contains Feature':True, 
+                    'Decision Tree':with_dict['decision_tree'],
+                    'Random Forest':with_dict['forest'],
+                    'Naive Bayes':with_dict['naive_bayes']}
+        without_row = {'Feature':x_exempt, 'Contains Feature':False, 
+                    'Decision Tree':without_dict['decision_tree'],
+                    'Random Forest':without_dict['forest'],
+                    'Naive Bayes':without_dict['naive_bayes']}
         df = df.append(with_row, ignore_index=True)
         df = df.append(without_row, ignore_index=True)
-    #df = df.melt(id_vars=['feature', 'contains'],
-                 #value_vars=['tree_mean', 'forest_mean', 'bayes_mean'],
-                 #var_name='model', value_name='value')
-    sns.catplot(x='feature', y='tree_mean', data=df,
-                kind='bar', hue='contains').set_xticklabels(rotation=45)
-    plt.title('Performance of Decision Tree with versus without a Feature')
-    plt.xlabel('Features')
-    plt.ylabel('Accuracy Score')
-    plt.savefig('features_performances_tree_model.png')
+    df = df.melt(id_vars=['Feature', 'Contains Feature'],
+                 value_vars=['Decision Tree', 'Random Forest', 'Naive Bayes'],
+                 var_name='model', value_name='Accuracy Score')
+    graph = sns.catplot(x='Feature', y='Accuracy Score', col='model', data=df,
+                kind='bar', hue='Contains Feature', col_wrap=1)
+    graph = graph.set_xticklabels(rotation=40)
+    plt.subplots_adjust(top=0.9)
+    graph.fig.suptitle('Performance of Models with vs. without a Feature')
+    plt.savefig('_performances_model.png')
     
-    sns.catplot(x='feature', y='forest_mean', data=df,
-                kind='bar', hue='contains').set_xticklabels(rotation=45)
-    plt.title('Performance of Random Forest with versus without a Feature')
-    plt.xlabel('Features')
-    plt.ylabel('Accuracy Score')
-    plt.savefig('features_performances_forest_model.png')
-
-    sns.catplot(x='feature', y='forest_mean', data=df,
-                kind='bar', hue='contains').set_xticklabels(rotation=45)
-    plt.title('Performance of Naive Bayes with versus without a Feature')
-    plt.xlabel('Features')
-    plt.ylabel('Accuracy Score')
-    plt.savefig('features_performances_bayes_model.png')
 
 def main():
     data = pd.read_csv('cleveland_processed.csv')
