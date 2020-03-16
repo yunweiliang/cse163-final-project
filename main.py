@@ -40,9 +40,9 @@ def plot_feature_importance(model, xes_exempt):
     graph = sns.catplot(x='Feature', y='Accuracy Score', col='model', data=df,
                 kind='bar', hue='Contains Feature', col_wrap=1)
     graph = graph.set_xticklabels(rotation=40)
-    plt.subplots_adjust(top=0.9)
+    plt.subplots_adjust(top=0.95)
     graph.fig.suptitle('Performance of Models with vs. without a Feature')
-    plt.savefig('_performances_model.png')
+    plt.savefig('features_performances_in_models.png')
     
 
 def main():
