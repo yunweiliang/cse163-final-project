@@ -22,8 +22,8 @@ def plot_feature_importance(model, xes_exempt):
     n = 5 # default five trials
 
     # comment next 2 lines to run for all features
-     xes_exempt = ['age'] 
-     n = 1
+    xes_exempt = ['age'] 
+    n = 1
     for x_exempt in xes_exempt:
         with_dict = model.calculate_mean_accuracy(n=n, x_exempt=x_exempt)
         without_dict = model.calculate_mean_accuracy(n=n, x_exempt=x_exempt)
@@ -73,7 +73,7 @@ def main():
 
     #correlation(clean_data)
     print()
-    print(model.cross_validation())
+    #print(model.cross_validation())
     #print()
     
     # Comment out the suggested 2 lines in plot_feature_importance to plot
