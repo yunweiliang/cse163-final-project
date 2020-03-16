@@ -28,19 +28,20 @@ def main():
     clean_data = model.get_clean_data()
     clean_data.to_csv('clean_data.csv', index=False)
     
-    print('Decision Tree Score:', model.decision_tree())
-    print('Gaussian Naive Bayes Score:', model.naive_bayes())
-    print('Random Forest Score:', model.forest())
-    print()
-    mean_accuracy = model.calculate_mean_accuracy()
-    print('Decision Tree Mean Score:', mean_accuracy['decision_tree'])
-    print('Gaussian Naive Bayes Mean Score:', mean_accuracy['naive_bayes'])
-    print('Random Forest Mean Score:', mean_accuracy['forest'])
+    #print('Decision Tree Score:', model.decision_tree())
+    #print('Gaussian Naive Bayes Score:', model.naive_bayes())
+    #print('Random Forest Score:', model.forest())
+    #print()
+    #mean_accuracy = model.calculate_mean_accuracy()
+    #print('Decision Tree Mean Score:', mean_accuracy['decision_tree'])
+    #print('Gaussian Naive Bayes Mean Score:', mean_accuracy['naive_bayes'])
+    #print('Random Forest Mean Score:', mean_accuracy['forest'])
 
     print(model.models_performances_box_plot())
 
-    correlation(clean_data)
+    #correlation(clean_data)
 
-    plot_feature_importance(model, 'age')
+    #plot_feature_importance(model, 'age')
+
 if __name__ == '__main__':
     main()
