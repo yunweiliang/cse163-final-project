@@ -29,7 +29,7 @@ class ML_Model:
     def decision_tree(self, x_exempt=None):
         X = self._data.loc[:, self._data.columns != 'prediction']
         if x_exempt is not None:
-            X = self._data.loc[:, self._data.columns != x_exempt]
+            X = X.loc[:, X.columns != x_exempt]
         X = pd.get_dummies(X)
         y = self._data['prediction']
 
@@ -47,7 +47,7 @@ class ML_Model:
         # save copy of dataframe format for plotting
         X = self._data.loc[:, self._data.columns != 'prediction']
         if x_exempt is not None:
-            X = self._data.loc[:, self._data.columns != x_exempt]
+            X = X.loc[:, X.columns != x_exempt]
         columns = X.columns
         X = pd.get_dummies(X)
         y = self._data['prediction']
@@ -73,7 +73,7 @@ class ML_Model:
     def naive_bayes(self, x_exempt=None):
         X = self._data.loc[:, self._data.columns != 'prediction']
         if x_exempt is not None:
-            X = self._data.loc[:, self._data.columns != x_exempt]
+            X = X.loc[:, X.columns != x_exempt]
         X = pd.get_dummies(X)
         y = self._data['prediction']
 
@@ -87,8 +87,8 @@ class ML_Model:
     def calculate_mean_accuracy(self, n=10, x_exempt=None):
         trials_df = self.run_trials(n=n, x_exempt=x_exempt)
         means = {'decision_tree': sum(trials_df.loc[:,'decision_tree']) / n,
-                     'naive_bayes': sum(trials_df.loc[:,'naive_bayes']) / n,
-                     'forest': sum(trials_df.loc[:,'forest'])/n}
+                 'forest': sum(trials_df.loc[:,'forest'])/n,
+                 'naive_bayes': sum(trials_df.loc[:,'naive_bayes']) / n}
         return means
 
     def models_performances_box_plot(self, n=10):

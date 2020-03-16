@@ -18,9 +18,9 @@ def plot_feature_importance(model, x_exempt):
     without_dict = model.calculate_mean_accuracy(x_exempt=x_exempt)
     combined = [with_dict, without_dict]
     df = pd.DataFrame(combined)
-    print(df)
     df = df.transpose()
     print(df)
+    
     
 def main():
     data = pd.read_csv('cleveland_processed.csv')
@@ -37,11 +37,11 @@ def main():
     #print('Gaussian Naive Bayes Mean Score:', mean_accuracy['naive_bayes'])
     #print('Random Forest Mean Score:', mean_accuracy['forest'])
 
-    print(model.models_performances_box_plot())
+    #print(model.models_performances_box_plot())
 
     #correlation(clean_data)
 
-    #plot_feature_importance(model, 'age')
+    plot_feature_importance(model, 'age')
 
 if __name__ == '__main__':
     main()
