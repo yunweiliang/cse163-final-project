@@ -22,8 +22,8 @@ def plot_feature_importance(model, xes_exempt):
     n = 5 # default five trials
 
     # comment next 2 lines to run for all features
-    xes_exempt = ['age'] 
-    n = 1
+    #xes_exempt = ['age', 'sex'] 
+    #n = 1
     for x_exempt in xes_exempt:
         with_dict = model.calculate_mean_accuracy(n=n, x_exempt=x_exempt)
         without_dict = model.calculate_mean_accuracy(n=n, x_exempt=x_exempt)
@@ -41,11 +41,12 @@ def plot_feature_importance(model, xes_exempt):
                  value_vars=['Decision Tree', 'Random Forest', 'Naive Bayes'],
                  var_name='model', value_name='Accuracy Score')
     graph = sns.catplot(x='Feature', y='Accuracy Score', col='model', data=df,
-                kind='bar', hue='Contains Feature', col_wrap=1)
-    graph = graph.set_xticklabels(rotation=40)
-    plt.subplots_adjust(top=0.95)
+                kind='bar', hue='Contains Feature', col_wrap=3)
+    graph = graph.set_xticklabels(rotation=30)
+    plt.subplots_adjust(top=0.9)
     graph.fig.suptitle('Performance of Models with vs. without a Feature')
     plt.savefig('features_performances_in_models.png')
+    
     return df
 
     
@@ -78,7 +79,8 @@ def main():
     
     # Comment out the suggested 2 lines in plot_feature_importance to plot
     # all features
-    print(plot_feature_importance(model, clean_data.columns[clean_data.columns != 'prediction']))
+    feature_importances = plot_feature_importance(model, clean_data.columns[clean_data.columns != 'prediction'])
+    feature_importances.to_csv('features_performances_in_models.csv')
 
 
 if __name__ == '__main__':
