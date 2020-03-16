@@ -18,9 +18,10 @@ def correlation(clean_data):
 def plot_feature_importance(model, xes_exempt):
     df = pd.DataFrame(columns=['Feature', 'Contains Feature', 'Decision Tree', 'Random Forest', 'Naive Bayes'])
     n = 5 # default five trials
+
     # comment next 2 lines to run for all features
-    xes_exempt = ['age'] 
-    n = 1
+     xes_exempt = ['age'] 
+     n = 1
     for x_exempt in xes_exempt:
         with_dict = model.calculate_mean_accuracy(n=n, x_exempt=x_exempt)
         without_dict = model.calculate_mean_accuracy(n=n, x_exempt=x_exempt)
@@ -43,6 +44,8 @@ def plot_feature_importance(model, xes_exempt):
     plt.subplots_adjust(top=0.95)
     graph.fig.suptitle('Performance of Models with vs. without a Feature')
     plt.savefig('features_performances_in_models.png')
+    return df
+
     
 
 def main():
@@ -69,8 +72,9 @@ def main():
     #correlation(clean_data)
     #print()
     
-    # Comment out 
-    plot_feature_importance(model, clean_data.columns[clean_data.columns != 'prediction'])
+    # Comment out the suggested 2 lines in plot_feature_importance to plot
+    # all features
+    print(plot_feature_importance(model, clean_data.columns[clean_data.columns != 'prediction']))
 
 if __name__ == '__main__':
     main()
