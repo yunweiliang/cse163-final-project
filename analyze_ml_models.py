@@ -93,7 +93,7 @@ class ML_Model:
 
     def models_performances_box_plot(self, n=10):
         sns.set(style='whitegrid')
-        sns.boxplot(data=self._run_trials())
+        sns.boxplot(data=self.run_trials())
         plt.title('Model Performance over ' + str(n) + ' Trials')
         plt.xticks((0, 1, 2), ('Decision Tree', 'Naive Bayes', 'Random Forest'))
         plt.xlabel('Models')
