@@ -5,6 +5,8 @@ from scipy.stats import pearsonr
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+
+
 def correlation(clean_data):
     corr = {}
     y = np.array(clean_data.loc[:, 'prediction'])
@@ -64,8 +66,8 @@ def main():
     #print(model.models_performances_box_plot())
 
     #correlation(clean_data)
-
-    plot_feature_importance(model, clean_data.columns[clean_data.columns != 'prediction'])
+    print(model.cross_validation())
+    #plot_feature_importance(model, clean_data.columns[clean_data.columns != 'prediction'])
 
 if __name__ == '__main__':
     main()

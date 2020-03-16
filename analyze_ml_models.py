@@ -16,6 +16,9 @@ from sklearn.tree import export_graphviz
 from subprocess import call
 from IPython.display import Image
 
+from sklearn.model_selection import KFold, cross_val_score
+
+
 class ML_Model:
     def __init__(self, file_path):
         self._data = file_path
@@ -115,6 +118,18 @@ class ML_Model:
             data['forest'][i] = self.forest(x_exempt)
 
         return pd.DataFrame(data)
+
+    def cross_validation(self, x_exempt=None):
+        X = self._data.loc[:, self._data.columns != 'prediction']
+        if x_exempt is not None:
+            X = X.loc[:, X.columns != x_exempt]
+        X = pd.get_dummies(X)
+        y = self._data['prediction']
+
+        k_fold = KFold(n_splits=10, shuffle=True, random_state=0)
+        model = GaussianNB()
+        val = cross_val_score(model, X, y, cv=k_fold, n_jobs=1)
+        return val
     
     def _plot_tree(self, model, X, y):
         """
