@@ -1,0 +1,13 @@
+,Feature,Contains Feature,model,Accuracy Score
+0,age,True,Decision Tree,0.6833333333333333
+1,age,False,Decision Tree,0.8166666666666667
+2,sex,True,Decision Tree,0.6833333333333333
+3,sex,False,Decision Tree,0.6333333333333333
+4,age,True,Random Forest,0.8333333333333334
+5,age,False,Random Forest,0.85
+6,sex,True,Random Forest,0.7833333333333333
+7,sex,False,Random Forest,0.8166666666666667
+8,age,True,Naive Bayes,0.8333333333333334
+9,age,False,Naive Bayes,0.8
+10,sex,True,Naive Bayes,0.9
+11,sex,False,Naive Bayes,0.7666666666666667
