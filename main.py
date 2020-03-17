@@ -70,7 +70,7 @@ def main():
     print('Gaussian Naive Bayes Mean Score:', mean_accuracy['naive_bayes'])
     print('Random Forest Mean Score:', mean_accuracy['forest'])
 
-    print(model.models_performances_box_plot())
+    print('Box Plot Means:', model.models_performances_box_plot())
     print()
 
     feature_correlations = correlation(clean_data)
