@@ -58,32 +58,32 @@ def main():
     clean_data = model.get_clean_data()
     clean_data.to_csv('clean_data.csv', index=False)
     
-    #print('Decision Tree Score:', model.decision_tree())
-    #print('Gaussian Naive Bayes Score:', model.naive_bayes())
-    #print('Random Forest Score:', model.forest())
-    #print()
+    print('Decision Tree Score:', model.decision_tree())
+    print('Gaussian Naive Bayes Score:', model.naive_bayes())
+    print('Random Forest Score:', model.forest())
+    print()
 
     # Following function calls runs multiple trials
     # Comment out if avoiding time-consuming operations
-    #mean_accuracy = model.calculate_mean_accuracy()
-    #print('Decision Tree Mean Score:', mean_accuracy['decision_tree'])
-    #print('Gaussian Naive Bayes Mean Score:', mean_accuracy['naive_bayes'])
-    #print('Random Forest Mean Score:', mean_accuracy['forest'])
+    mean_accuracy = model.calculate_mean_accuracy()
+    print('Decision Tree Mean Score:', mean_accuracy['decision_tree'])
+    print('Gaussian Naive Bayes Mean Score:', mean_accuracy['naive_bayes'])
+    print('Random Forest Mean Score:', mean_accuracy['forest'])
 
-    #print(model.models_performances_box_plot())
-    #print()
+    print(model.models_performances_box_plot())
+    print()
 
     feature_correlations = correlation(clean_data)
     print(feature_correlations)
     feature_correlations.to_csv('feature_correlations_to_prediction.csv')
-    #print(model.cross_validation())
-    #print()
+    print(model.cross_validation())
+    print()
     
     # Comment out the suggested 2 lines in plot_feature_importance to plot
     # all features
-    #feature_importances = plot_feature_importance(model, clean_data.columns[clean_data.columns != 'prediction'])
-    #print(feature_importances)
-    #feature_importances.to_csv('features_performances_in_models.csv')
+    feature_importances = plot_feature_importance(model, clean_data.columns[clean_data.columns != 'prediction'])
+    print(feature_importances)
+    feature_importances.to_csv('features_performances_in_models.csv')
 
 
 if __name__ == '__main__':
