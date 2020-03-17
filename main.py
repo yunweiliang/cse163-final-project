@@ -1,3 +1,8 @@
+# Phuong Vu, Yunwei Liang, Trinh Nguyen
+#
+# main contains functions for feature analysis and
+# runs functions from ML_Model class for model analysis
+
 from analyze_ml_models import ML_Model
 import numpy as np
 import pandas as pd
@@ -23,8 +28,8 @@ def plot_feature_importance(model, xes_exempt):
     n = 5 # default five trials
 
     ######################## comment next 2 lines to run for all features ###########################
-    xes_exempt = ['age', 'sex'] 
-    n = 1
+    # xes_exempt = ['age', 'sex'] 
+    # n = 1
 
     for x_exempt in xes_exempt:
         with_dict = model.calculate_mean_accuracy(n=n, x_exempt=x_exempt)
@@ -65,6 +70,7 @@ def main():
 
     # Following function calls runs multiple trials
     # Comment out if avoiding time-consuming operations
+    # e.g. for testing purposes
     mean_accuracy = model.calculate_mean_accuracy()
     print('Decision Tree Mean Score:', mean_accuracy['decision_tree'])
     print('Gaussian Naive Bayes Mean Score:', mean_accuracy['naive_bayes'])
@@ -79,8 +85,6 @@ def main():
     print(model.cross_validation())
     print()
     
-    # Comment out the suggested 2 lines in plot_feature_importance to plot
-    # all features
     feature_importances = plot_feature_importance(model, clean_data.columns[clean_data.columns != 'prediction'])
     print(feature_importances)
     feature_importances.to_csv('features_performances_in_models.csv')

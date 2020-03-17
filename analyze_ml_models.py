@@ -1,3 +1,11 @@
+# Phuong Vu, Yunwei Liang, Trinh Nguyen
+#
+# analyze_ml_models contains the ML_Model
+# class with functions for analysis on three
+# Machine Learning models: Decision Tree Classifier,
+# Random Forest Classifier, and Gaussian Naive Bayes
+# Classifier.
+
 import pandas as pd
 import numpy as np
 import graphviz
@@ -12,23 +20,34 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn import tree
 from sklearn.tree import export_graphviz
-from subprocess import call
-from IPython.display import Image
 
 from sklearn.model_selection import KFold, cross_val_score
 
 
 class ML_Model:
-    def __init__(self, file_path):
-        self._data = file_path
+    def __init__(self, df):
+        """
+        Takes in a DataFrame of heart disease data
+        and create a ML_Model object
+        """
+        self._data = df
         self._data = self._data.dropna().reset_index(drop=True)
         self._data.loc[self._data['prediction'] > 0, 'prediction'] = 1 # Make into binary problem
         self._feature_importances = None
 
     def get_clean_data(self):
+        """
+        Returns a processed data with prediction converted to binary values.
+        """
         return self._data
 
     def decision_tree(self, x_exempt=None):
+        """
+        Takes in an optional x_exempt argument and trains a Decision Tree
+        Classifier with all attributes except x_exempt as the features
+        and prediction as the label. Outputs a decision_tree_model.pdf
+        of the model visualization. Returns the accuracy of model. 
+        """
         X = self._data.loc[:, self._data.columns != 'prediction']
         if x_exempt is not None:
             X = X.loc[:, X.columns != x_exempt]
@@ -46,6 +65,12 @@ class ML_Model:
         return score
 
     def forest(self, x_exempt=None):
+        """
+        Takes in an optional x_exempt argument and trains a Random Forest
+        Classifier with all attributes except x_exempt as the features
+        and prediction as the label. Outputs a random_forest_model.pdf
+        of the model visualization. Returns the accuracy of model. 
+        """
         # save copy of dataframe format for plotting
         X = self._data.loc[:, self._data.columns != 'prediction']
         if x_exempt is not None:
@@ -73,6 +98,11 @@ class ML_Model:
         return score
 
     def naive_bayes(self, x_exempt=None):
+        """
+        Takes in an optional x_exempt argument and trains a Gaussian Naive
+        Bayes Classifier with all attributes except x_exempt as the features
+        and prediction as the label. Returns the accuracy of model. 
+        """
         X = self._data.loc[:, self._data.columns != 'prediction']
         if x_exempt is not None:
             X = X.loc[:, X.columns != x_exempt]
@@ -87,6 +117,12 @@ class ML_Model:
         return score
 
     def calculate_mean_accuracy(self, n=10, x_exempt=None):
+        """
+        Takes in optional n and optional x_exempt arguments. Runs n trials
+        for each of the three models with all attributes except x_exempt
+        as the features and prediction as the label. Returns a dictionary
+        of model type mapped to their average accuracy scores. 
+        """
         trials_df = self.run_trials(n=n, x_exempt=x_exempt)
         means = {'decision_tree': sum(trials_df.loc[:,'decision_tree']) / n,
                  'forest': sum(trials_df.loc[:,'forest'])/n,
@@ -94,6 +130,13 @@ class ML_Model:
         return means
 
     def models_performances_box_plot(self, n=10):
+        """
+        Takes in an optional n argument. Runs n trials for each of the
+        three models with all attributes as the features and prediction
+        as the label. Outputs a box_plot.png file of box plots comparing
+        the accuracy scores of the three models. Returns a dictionary
+        of model type mapped to their average accuracy scores. 
+        """
         sns.set(style='whitegrid')
         trials_df = self.run_trials()
         sns.boxplot(data=trials_df)
@@ -108,6 +151,13 @@ class ML_Model:
         return means
      
     def run_trials(self, n=10, x_exempt=None):
+        """
+        Takes in optional n and optional x_exempt arguments. Runs n trials
+        for each of the three models with all attributes except x_exempt
+        as the features and prediction as the label. Returns a DataFrame
+        of model as column names and each trial's accuracy recorded in
+        respective columns.
+        """
         data = {'decision_tree':np.zeros(n),
                 'forest':np.zeros(n),
                 'naive_bayes':np.zeros(n)}
@@ -119,6 +169,13 @@ class ML_Model:
         return pd.DataFrame(data)
 
     def cross_validation(self, x_exempt=None):
+        """
+        Takes in optional n and optional x_exempt arguments. Runs n trials
+        for each of the three models with all attributes except x_exempt
+        as the features and prediction as the label. Returns a DataFrame
+        of model as column names and each trial's accuracy recorded in
+        respective columns.
+        """
         sum = 0
         X = self._data.loc[:, self._data.columns != 'prediction']
         if x_exempt is not None:
