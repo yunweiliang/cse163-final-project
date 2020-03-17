@@ -119,6 +119,7 @@ class ML_Model:
         return pd.DataFrame(data)
 
     def cross_validation(self, x_exempt=None):
+        sum = 0
         X = self._data.loc[:, self._data.columns != 'prediction']
         if x_exempt is not None:
             X = X.loc[:, X.columns != x_exempt]
@@ -128,7 +129,9 @@ class ML_Model:
         k_fold = KFold(n_splits=10, shuffle=True, random_state=0)
         model = GaussianNB()
         val = cross_val_score(model, X, y, cv=k_fold, n_jobs=1)
-        return val
+        for i in val:
+            sum += i
+        return sum/len(val)
     
     def _plot_tree(self, model, X, y):
         """

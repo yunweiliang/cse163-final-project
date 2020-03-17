@@ -73,12 +73,12 @@ def main():
 
     #correlation(clean_data)
     print()
-    #print(model.cross_validation())
+    print(model.cross_validation())
     #print()
     
     # Comment out the suggested 2 lines in plot_feature_importance to plot
     # all features
-    print(plot_feature_importance(model, clean_data.columns[clean_data.columns != 'prediction']))
+    #print(plot_feature_importance(model, clean_data.columns[clean_data.columns != 'prediction']))
 
 
 if __name__ == '__main__':
